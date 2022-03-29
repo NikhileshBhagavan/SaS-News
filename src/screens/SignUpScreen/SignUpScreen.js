@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {View, Text, StyleSheet,ToastAndroid, ScrollView} from 'react-native';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import SocialSignInButtons from '../../components/SocialSignInButtons';
 import {useNavigation} from '@react-navigation/core';
 import {useForm} from 'react-hook-form';
+import axios from 'axios';
 
 const EMAIL_REGEX =
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -15,8 +16,31 @@ const SignUpScreen = () => {
   const navigation = useNavigation();
 
   const onRegisterPressed = (data) => {
+    const username=data.username;
+    const email=data.email;
+    const url='http://10.61.71.82:3000/preregistercheck/'+username+'/'+email;
+    console.log(url);
+    axios.get(url)
+  .then(function (response) {
     console.log(data);
-    navigation.navigate('ConfirmEmail');
+    if(response.data.message==="Success"){
+      navigation.navigate('ConfirmEmail',{
+        username:data.username,
+        password:data.password,
+        email:data.email,
+      });
+    }
+    else{
+      ToastAndroid.show(response.data.message,4000);
+    }
+  
+
+  })
+  .catch(function (error) {
+    // handle error
+    console.log(error);
+  })
+   
   };
 
   const onSignInPress = () => {
