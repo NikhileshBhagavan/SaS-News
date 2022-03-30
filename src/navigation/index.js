@@ -19,9 +19,9 @@ const Navigation = () => {
     username:'',
     isSignedIn:false,
   });
-  /*async function save(key, value) {
+  async function save(key, value) {
     await SecureStore.setItemAsync(key, value);
-  }*/
+  }
   /*async function checkifuserloggedIn() {
     let result = await SecureStore.getItemAsync(isLoggedIn);
     if(result===true){
@@ -33,9 +33,13 @@ const Navigation = () => {
     }
   
   }*/
- /* useEffect(() => {
-      checkifuserloggedIn();
-  }, []);*/
+ useEffect(async () => {
+ let result = await SecureStore.getItemAsync("isLoggedIn");
+  if(result==="true"){
+    let user_name=await SecureStore.getItemAsync("user");
+    setuser({isSignedIn:true,username:user_name});
+  }
+  }, []);
 
   function logout(){
 
@@ -48,11 +52,11 @@ const Navigation = () => {
         {user.isSignedIn==false?
         <>
          <Stack.Screen name="SignIn" >
-          {props => <SignInScreen {...props} exec={setuser}  />}
+          {props => <SignInScreen {...props} exec={setuser} save={save}/>}
         </Stack.Screen>
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="ConfirmEmail" initialParams={{username:"",email:"",password:""}}>
-          {props => <ConfirmEmailScreen {...props} exec={setuser}  />}
+          {props => <ConfirmEmailScreen {...props} exec={setuser} save={save}  />}
         </Stack.Screen>
         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
         <Stack.Screen name="NewPassword" component={NewPasswordScreen} initialParams={{username:"",email:""}}/>
@@ -60,7 +64,7 @@ const Navigation = () => {
           :
        
           <Stack.Screen name="Home">
-          {props => <HomeScreen {...props} user={{username:user.username}} logout={logout}  />}
+          {props => <HomeScreen {...props} user={{username:user.username}} logout={logout} save={save}  />}
         </Stack.Screen>
 }
       

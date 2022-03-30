@@ -27,15 +27,15 @@ const SignInScreen = (props) => {
   } = useForm();
 
   const onSignInPressed = data => {
-    axios.post('http://10.61.71.82:3000/find_user', {
+    axios.post('http://10.61.12.244:3000/find_user', {
       username: data.username,
       password: data.password,
    
     })
     .then(function (response) {
       if(response.data.message==="found"){
-        //props.save(isLoggedIn,true);
-        //props.save(user,details.username);
+     props.save("isLoggedIn","true");
+        props.save("user",data.username);
         
         props.exec({isSignedIn:true,username:data.username});
       }
@@ -50,7 +50,7 @@ const SignInScreen = (props) => {
     })
     .catch(function (error) {
       console.log(error);
-      ToastAndroid.show("Something went wrong  ",5000);
+      ToastAndroid.show("Something went wrong   ",5000);
     });
   };
 

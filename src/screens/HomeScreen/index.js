@@ -3,6 +3,8 @@ import {View, Text,Button} from 'react-native';
 
 const Index = (props) => {
   function logout(){
+  props.save("isLoggedIn","false");
+  props.save("user","");
     props.logout();
   }
   return (

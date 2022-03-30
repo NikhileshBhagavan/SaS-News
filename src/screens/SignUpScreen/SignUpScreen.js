@@ -18,7 +18,7 @@ const SignUpScreen = () => {
   const onRegisterPressed = (data) => {
     const username=data.username;
     const email=data.email;
-    const url='http://10.61.71.82:3000/preregistercheck/'+username+'/'+email;
+    const url='http://10.61.12.244:3000/preregistercheck/'+username+'/'+email;
     console.log(url);
     axios.get(url)
   .then(function (response) {

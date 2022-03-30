@@ -12,7 +12,8 @@ const ForgotPasswordScreen = () => {
   const navigation = useNavigation();
 
   const onSendPressed = data => {
-    axios.post('http://10.61.71.82:3000/find_user_for_pwch', {
+    console.log("hi");
+    axios.post('http://10.61.12.244:3000/find_user_for_pwch', {
       username: data.username,
 
    

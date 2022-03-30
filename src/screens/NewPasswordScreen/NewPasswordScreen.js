@@ -35,7 +35,7 @@ const NewPasswordScreen = (props) => {
     }
     
     ToastAndroid.show("OTP have been sent to "+s,5000);
-    axios.get('http://10.61.71.82:3000/sendotp/'+details.email)
+    axios.get('http://10.61.12.244:3000/sendotp/'+details.email)
     .then(function (response) {
       if(response.data.is_success===false){
         ToastAndroid.show(response.data.message,5000);
@@ -62,7 +62,7 @@ const NewPasswordScreen = (props) => {
       ToastAndroid.show("Incorrect OTP",5000);
     }
     else{
-      axios.post('http://10.61.71.82:3000/changepassword', {
+      axios.post('http://10.61.12.244:3000/changepassword', {
         username: details.username,
         password: data.password,
      
