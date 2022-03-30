@@ -1,40 +1,109 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, ScrollView,ToastAndroid} from 'react-native';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import SocialSignInButtons from '../../components/SocialSignInButtons';
 import {useNavigation} from '@react-navigation/native';
 import {useForm} from 'react-hook-form';
+import { useEffect } from 'react';
+import axios from 'axios';
 
-const NewPasswordScreen = () => {
+const NewPasswordScreen = (props) => {
   const {control, handleSubmit} = useForm();
+  const [details,setdetails]=useState({
+    ...props.route.params,
+    otp:null
+  });
+
+
+  function getcodefrombackend(){
+    let em=details.email;
+    let s="";
+    let found=false;
+    for(let i=0;i<em.length;i++){
+      if(i>=3 && em.charAt(i)!='@' && found==false ){
+        s=s+'*';
+        
+      }
+      else{
+        if(em.charAt(i)=='@'){
+          found=true;
+        }
+          s=s+em.charAt(i);
+       
+      }
+    }
+    
+    ToastAndroid.show("OTP have been sent to "+s,5000);
+    axios.get('http://10.61.71.82:3000/sendotp/'+details.email)
+    .then(function (response) {
+      if(response.data.is_success===false){
+        ToastAndroid.show(response.data.message,5000);
+      }
+      else{
+      setdetails({...details,otp:response.data.message});
+      }
+      console.log(response.data.message);
+    })
+    .catch(function (error) {
+      ToastAndroid.show("Something went wrong",3000);
+    });
+  }
+  useEffect(()=>{
+   
+      getcodefrombackend();
+  },[])
 
   const navigation = useNavigation();
 
   const onSubmitPressed = data => {
-    console.warn(data);
-    navigation.navigate('Home');
+    console.log(data.otp +" "+ details.otp);
+    if(data.otp!=details.otp){
+      ToastAndroid.show("Incorrect OTP",5000);
+    }
+    else{
+      axios.post('http://10.61.71.82:3000/changepassword', {
+        username: details.username,
+        password: data.password,
+     
+      })
+      .then(function (response) {
+        if(response.data.message==="success"){
+          ToastAndroid.show("Password Updated Successfully",4000);
+          navigation.navigate("SignIn");
+        }
+        else{
+          ToastAndroid.show("Something went wrong ... Click On Resend OTP",5000);
+        }
+      })
+      .catch(function (error) {
+        ToastAndroid.show("Something went wrong",5000);
+      });
+    }
   };
 
   const onSignInPress = () => {
     navigation.navigate('SignIn');
   };
-
+  
+  const onResendPress = () => {
+    getcodefrombackend();
+  };
   return (
     <View style={styles.main}>
       <View style={styles.root}>
         <Text style={styles.title}>Reset your password</Text>
 
         <CustomInput
-          placeholder="Code"
-          name="code"
+          placeholder="OTP"
+          name="otp"
           control={control}
-          rules={{required: 'Code is required'}}
+          rules={{required: 'OTP is required'}}
         />
 
         <CustomInput
           placeholder="Enter your new password"
-          name="name"
+          name="password"
           control={control}
           secureTextEntry
           rules={{
@@ -47,6 +116,11 @@ const NewPasswordScreen = () => {
         />
 
         <CustomButton text="Submit" onPress={handleSubmit(onSubmitPressed)} />
+        <CustomButton
+          text="Resend OTP"
+          onPress={onResendPress}
+          type="SECONDARY"
+        />
 
         <CustomButton
           text="Back to Sign in"

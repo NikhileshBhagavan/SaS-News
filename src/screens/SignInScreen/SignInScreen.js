@@ -14,8 +14,9 @@ import CustomButton from '../../components/CustomButton';
 import SocialSignInButtons from '../../components/SocialSignInButtons';
 import {useNavigation} from '@react-navigation/native';
 import {useForm, Controller} from 'react-hook-form';
-
-const SignInScreen = () => {
+import axios from 'axios';
+import { ToastAndroid } from 'react-native';
+const SignInScreen = (props) => {
   const {height} = useWindowDimensions();
   const navigation = useNavigation();
 
@@ -26,9 +27,31 @@ const SignInScreen = () => {
   } = useForm();
 
   const onSignInPressed = data => {
-    console.log(data.username+" " +data.password);
-    // validate user
-    navigation.navigate('Home');
+    axios.post('http://10.61.71.82:3000/find_user', {
+      username: data.username,
+      password: data.password,
+   
+    })
+    .then(function (response) {
+      if(response.data.message==="found"){
+        //props.save(isLoggedIn,true);
+        //props.save(user,details.username);
+        
+        props.exec({isSignedIn:true,username:data.username});
+      }
+      else{
+        if(response.data.message==="notfound"){
+        ToastAndroid.show("Incorrect Username or Password ",5000);
+        }
+        else{
+          ToastAndroid.show("Something went wrong ",5000);
+        }
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+      ToastAndroid.show("Something went wrong  ",5000);
+    });
   };
 
   const onForgotPasswordPressed = () => {

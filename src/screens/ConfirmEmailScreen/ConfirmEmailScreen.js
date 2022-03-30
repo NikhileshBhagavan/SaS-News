@@ -43,8 +43,7 @@ const ConfirmEmailScreen = (props) => {
         console.log(response.data.message);
       })
       .catch(function (error) {
-        // handle error
-        console.log(error);
+        ToastAndroid.show("Something went wrong",3000);
       });
     }
   useEffect(()=>{
@@ -58,8 +57,33 @@ const ConfirmEmailScreen = (props) => {
   const navigation = useNavigation();
 
   const onConfirmPressed = data => {
-    console.warn(data);
-    navigation.navigate('Home');
+    console.log(data.code +" "+ details.code);
+    if(data.code!=details.code){
+      ToastAndroid.show("Incorrect Confirmation Code",5000);
+    }
+    else{
+      axios.post('http://10.61.71.82:3000/registeruser', {
+        username: details.username,
+        password: details.password,
+        email : details.email,
+      })
+      .then(function (response) {
+        if(response.data.message==="success"){
+          //props.save(isLoggedIn,true);
+          //props.save(user,details.username);
+          ToastAndroid.show("Registration Successful",4000);
+          props.exec({isSignedIn:true,username:details.username});
+        }
+        else{
+          ToastAndroid.show("Something went wrong",5000);
+        }
+      })
+      .catch(function (error) {
+        ToastAndroid.show("Something went wrong",5000);
+      });
+    }
+
+
   };
 
   const onSignInPress = () => {

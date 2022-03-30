@@ -1,18 +1,41 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, ScrollView,ToastAndroid} from 'react-native';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import SocialSignInButtons from '../../components/SocialSignInButtons';
 import {useNavigation} from '@react-navigation/core';
 import {useForm} from 'react-hook-form';
+import axios from 'axios';
 
 const ForgotPasswordScreen = () => {
   const {control, handleSubmit} = useForm();
   const navigation = useNavigation();
 
   const onSendPressed = data => {
-    console.warn(data);
-    navigation.navigate('NewPassword');
+    axios.post('http://10.61.71.82:3000/find_user_for_pwch', {
+      username: data.username,
+
+   
+    })
+    .then(function (response) {
+      if(response.data.message==="error"){
+        ToastAndroid.show("Something went wrong ... Try Again",5000);
+      }
+      else{
+        if(response.data.message==="found"){
+          navigation.navigate("NewPassword",{email:response.data.email,username:data.username});
+        }
+        else{
+          ToastAndroid.show("Invalid Username",3000);
+        }
+      }
+       
+    })
+    .catch(function (error) {
+      console.log(error);
+      ToastAndroid.show("Something went wrong ... Try Again",5000);
+    });
+   
   };
 
   const onSignInPress = () => {
