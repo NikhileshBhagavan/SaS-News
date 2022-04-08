@@ -15,6 +15,7 @@ import SocialSignInButtons from '../../components/SocialSignInButtons';
 import {useNavigation} from '@react-navigation/native';
 import {useForm, Controller} from 'react-hook-form';
 import axios from 'axios';
+import url from '../url.js';
 import { ToastAndroid } from 'react-native';
 const SignInScreen = (props) => {
   const {height} = useWindowDimensions();
@@ -27,7 +28,9 @@ const SignInScreen = (props) => {
   } = useForm();
 
   const onSignInPressed = data => {
-    axios.post('http://10.61.12.244:3000/find_user', {
+    console.log("On sign in pressed ... Clicked");
+    console.log(data);
+    axios.post('http://'+url+'/find_user', {
       username: data.username,
       password: data.password,
    

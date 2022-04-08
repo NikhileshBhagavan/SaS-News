@@ -6,6 +6,7 @@ import SocialSignInButtons from '../../components/SocialSignInButtons';
 import {useNavigation} from '@react-navigation/core';
 import {useForm} from 'react-hook-form';
 import axios from 'axios';
+import url from '../url.js';
 
 const EMAIL_REGEX =
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -18,9 +19,9 @@ const SignUpScreen = () => {
   const onRegisterPressed = (data) => {
     const username=data.username;
     const email=data.email;
-    const url='http://10.61.12.244:3000/preregistercheck/'+username+'/'+email;
-    console.log(url);
-    axios.get(url)
+    const ur=`http://${url}/preregistercheck/${username}/${email}`;
+    console.log(ur);
+    axios.get(ur)
   .then(function (response) {
     console.log(data);
     if(response.data.message==="Success"){

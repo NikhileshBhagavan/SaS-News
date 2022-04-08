@@ -8,6 +8,7 @@ import {useForm} from 'react-hook-form';
 import {useEffect } from 'react';
 import axios from 'axios';
 import { ToastAndroid } from 'react-native';
+import url from '../url.js';
 
 const ConfirmEmailScreen = (props) => {
   const {control, handleSubmit} = useForm();
@@ -32,7 +33,7 @@ const ConfirmEmailScreen = (props) => {
       }
       
       ToastAndroid.show("Confirmation code have been sent to "+s,5000);
-      axios.get('http://10.61.12.244:3000/generateemailconfirmationcode/'+details.email)
+      axios.get('http://'+url+'/generateemailconfirmationcode/'+details.email)
       .then(function (response) {
         if(response.data.is_success===false){
           ToastAndroid.show(response.data.message,5000);
@@ -62,7 +63,7 @@ const ConfirmEmailScreen = (props) => {
       ToastAndroid.show("Incorrect Confirmation Code",5000);
     }
     else{
-      axios.post('http://10.61.12.244:3000/registeruser', {
+      axios.post('http://'+url+'/registeruser', {
         username: details.username,
         password: details.password,
         email : details.email,

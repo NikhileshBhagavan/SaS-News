@@ -7,9 +7,10 @@ const CustomButton = ({onPress, text, type = 'PRIMARY', bgColor, fgColor}) => {
       onPress={onPress}
       style={[
         styles.container,
-        styles[`container_${type}`],
+        styles[`container_${type}`],{zIndex: 0.5, },
         bgColor ? {backgroundColor: bgColor} : {},
       ]}>
+       
       <Text
         style={[
           styles.text,
@@ -26,7 +27,7 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
 
-    padding: 11,
+    padding: 12,
     marginVertical: 5,
 
     alignItems: 'center',

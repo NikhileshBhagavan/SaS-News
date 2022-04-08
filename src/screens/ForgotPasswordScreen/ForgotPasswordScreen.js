@@ -6,14 +6,14 @@ import SocialSignInButtons from '../../components/SocialSignInButtons';
 import {useNavigation} from '@react-navigation/core';
 import {useForm} from 'react-hook-form';
 import axios from 'axios';
-
+import url from '../url.js';
 const ForgotPasswordScreen = () => {
   const {control, handleSubmit} = useForm();
   const navigation = useNavigation();
 
   const onSendPressed = data => {
     console.log("hi");
-    axios.post('http://10.61.12.244:3000/find_user_for_pwch', {
+    axios.post('http://'+url+'/find_user_for_pwch', {
       username: data.username,
 
    

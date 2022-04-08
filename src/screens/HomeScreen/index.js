@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text,Button} from 'react-native';
-
+import url from '../url.js';
 const Index = (props) => {
   function logout(){
   props.save("isLoggedIn","false");

@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, TextInput, StyleSheet} from 'react-native';
 import {Controller} from 'react-hook-form';
 
+
 const CustomInput = ({
   control,
   name,
@@ -21,7 +22,9 @@ const CustomInput = ({
               styles.container,
               {borderColor: error ? 'red' : '#e8e8e8'},
             ]}>
+            
             <TextInput
+            
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
@@ -43,6 +46,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     width: '100%',
+    flexDirection:'row',
 
     borderColor: '#e8e8e8',
     borderWidth: 1,
